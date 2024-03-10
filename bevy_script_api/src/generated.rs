@@ -2894,11 +2894,11 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add Wrapped(Vec4) -> Wrapped(Color),
         self Add Wrapped(Color) -> Wrapped(Color),
+        self Add Wrapped(Vec4) -> Wrapped(Color),
         self Mul Wrapped(Vec3) -> Wrapped(Color),
-        self Mul Raw(f32) -> Wrapped(Color),
         self Mul Wrapped(Vec4) -> Wrapped(Color),
+        self Mul Raw(f32) -> Wrapped(Color),
     )
     + UnaryOps
     (
@@ -3562,6 +3562,14 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f32),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f32::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Returns `self` normalized to length 1.0.
         ///
         ///For valid results, `self` must _not_ be of length zero, nor very close to zero.
@@ -3740,21 +3748,21 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add Raw(f32) -> Wrapped(Vec2),
         self Add Wrapped(Vec2) -> Wrapped(Vec2),
+        self Add Raw(f32) -> Wrapped(Vec2),
         self Add self -> Wrapped(Vec2),
-        self Sub Wrapped(Vec2) -> Wrapped(Vec2),
         self Sub Raw(f32) -> Wrapped(Vec2),
         self Sub self -> Wrapped(Vec2),
+        self Sub Wrapped(Vec2) -> Wrapped(Vec2),
         self Div Wrapped(Vec2) -> Wrapped(Vec2),
-        self Div Raw(f32) -> Wrapped(Vec2),
         self Div self -> Wrapped(Vec2),
+        self Div Raw(f32) -> Wrapped(Vec2),
         self Mul Raw(f32) -> Wrapped(Vec2),
         self Mul Wrapped(Vec2) -> Wrapped(Vec2),
         self Mul self -> Wrapped(Vec2),
         self Rem self -> Wrapped(Vec2),
-        self Rem Raw(f32) -> Wrapped(Vec2),
         self Rem Wrapped(Vec2) -> Wrapped(Vec2),
+        self Rem Raw(f32) -> Wrapped(Vec2),
     )
     + UnaryOps
     (
@@ -3924,6 +3932,14 @@ impl_script_newtype! {
 
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f32),
+
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f32::rem_euclid
+        rem_euclid(self:self) -> self,
 
         ///Returns `self` normalized to length 1.0.
         ///
@@ -4106,18 +4122,18 @@ impl_script_newtype! {
         self Add self -> Wrapped(Vec3),
         self Add Wrapped(Vec3) -> Wrapped(Vec3),
         self Add Raw(f32) -> Wrapped(Vec3),
-        self Sub Raw(f32) -> Wrapped(Vec3),
         self Sub self -> Wrapped(Vec3),
         self Sub Wrapped(Vec3) -> Wrapped(Vec3),
+        self Sub Raw(f32) -> Wrapped(Vec3),
+        self Div self -> Wrapped(Vec3),
         self Div Wrapped(Vec3) -> Wrapped(Vec3),
         self Div Raw(f32) -> Wrapped(Vec3),
-        self Div self -> Wrapped(Vec3),
+        self Mul Raw(f32) -> Wrapped(Vec3),
         self Mul self -> Wrapped(Vec3),
         self Mul Wrapped(Vec3) -> Wrapped(Vec3),
-        self Mul Raw(f32) -> Wrapped(Vec3),
+        self Rem Raw(f32) -> Wrapped(Vec3),
         self Rem self -> Wrapped(Vec3),
         self Rem Wrapped(Vec3) -> Wrapped(Vec3),
-        self Rem Raw(f32) -> Wrapped(Vec3),
     )
     + UnaryOps
     (
@@ -4296,6 +4312,14 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f32),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f32::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Returns `self` normalized to length 1.0.
         ///
         ///For valid results, `self` must _not_ be of length zero, nor very close to zero.
@@ -4471,21 +4495,21 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Add Raw(f32) -> Wrapped(Vec3A),
+        self Add Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Add self -> Wrapped(Vec3A),
         self Sub Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Sub self -> Wrapped(Vec3A),
         self Sub Raw(f32) -> Wrapped(Vec3A),
-        self Div Raw(f32) -> Wrapped(Vec3A),
         self Div self -> Wrapped(Vec3A),
+        self Div Raw(f32) -> Wrapped(Vec3A),
         self Div Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Mul self -> Wrapped(Vec3A),
-        self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Mul Raw(f32) -> Wrapped(Vec3A),
-        self Rem Wrapped(Vec3A) -> Wrapped(Vec3A),
-        self Rem Raw(f32) -> Wrapped(Vec3A),
+        self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Rem self -> Wrapped(Vec3A),
+        self Rem Raw(f32) -> Wrapped(Vec3A),
+        self Rem Wrapped(Vec3A) -> Wrapped(Vec3A),
     )
     + UnaryOps
     (
@@ -4522,7 +4546,7 @@ impl_script_newtype! {
         ///uses the element from `if_false`.
         select(Wrapped(BVec4A),self,self) -> self,
 
-        ///Creates a 2D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
+        ///Creates a 3D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
         ///
         ///Truncation to [`Vec3`] may also be performed by using [`self.xyz()`][crate::swizzles::Vec4Swizzles::xyz()].
         ///
@@ -4655,6 +4679,14 @@ impl_script_newtype! {
 
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f32),
+
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f32::rem_euclid
+        rem_euclid(self:self) -> self,
 
         ///Returns `self` normalized to length 1.0.
         ///
@@ -4810,17 +4842,17 @@ impl_script_newtype! {
     + BinOps
     (
         self Add Raw(f32) -> Wrapped(Vec4),
-        self Add Wrapped(Vec4) -> Wrapped(Vec4),
         self Add self -> Wrapped(Vec4),
-        self Sub Raw(f32) -> Wrapped(Vec4),
+        self Add Wrapped(Vec4) -> Wrapped(Vec4),
         self Sub self -> Wrapped(Vec4),
         self Sub Wrapped(Vec4) -> Wrapped(Vec4),
+        self Sub Raw(f32) -> Wrapped(Vec4),
         self Div Raw(f32) -> Wrapped(Vec4),
         self Div self -> Wrapped(Vec4),
         self Div Wrapped(Vec4) -> Wrapped(Vec4),
-        self Mul Raw(f32) -> Wrapped(Vec4),
         self Mul self -> Wrapped(Vec4),
         self Mul Wrapped(Vec4) -> Wrapped(Vec4),
+        self Mul Raw(f32) -> Wrapped(Vec4),
         self Rem self -> Wrapped(Vec4),
         self Rem Wrapped(Vec4) -> Wrapped(Vec4),
         self Rem Raw(f32) -> Wrapped(Vec4),
@@ -5249,6 +5281,14 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f64),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f64::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Returns `self` normalized to length 1.0.
         ///
         ///For valid results, `self` must _not_ be of length zero, nor very close to zero.
@@ -5427,21 +5467,21 @@ impl_script_newtype! {
     )
     + BinOps
     (
+        self Add Wrapped(DVec2) -> Wrapped(DVec2),
         self Add self -> Wrapped(DVec2),
         self Add Raw(f64) -> Wrapped(DVec2),
-        self Add Wrapped(DVec2) -> Wrapped(DVec2),
+        self Sub self -> Wrapped(DVec2),
         self Sub Raw(f64) -> Wrapped(DVec2),
         self Sub Wrapped(DVec2) -> Wrapped(DVec2),
-        self Sub self -> Wrapped(DVec2),
+        self Div Raw(f64) -> Wrapped(DVec2),
         self Div self -> Wrapped(DVec2),
         self Div Wrapped(DVec2) -> Wrapped(DVec2),
-        self Div Raw(f64) -> Wrapped(DVec2),
+        self Mul Raw(f64) -> Wrapped(DVec2),
         self Mul Wrapped(DVec2) -> Wrapped(DVec2),
         self Mul self -> Wrapped(DVec2),
-        self Mul Raw(f64) -> Wrapped(DVec2),
-        self Rem self -> Wrapped(DVec2),
-        self Rem Raw(f64) -> Wrapped(DVec2),
         self Rem Wrapped(DVec2) -> Wrapped(DVec2),
+        self Rem Raw(f64) -> Wrapped(DVec2),
+        self Rem self -> Wrapped(DVec2),
     )
     + UnaryOps
     (
@@ -5611,6 +5651,14 @@ impl_script_newtype! {
 
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f64),
+
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f64::rem_euclid
+        rem_euclid(self:self) -> self,
 
         ///Returns `self` normalized to length 1.0.
         ///
@@ -5793,21 +5841,21 @@ impl_script_newtype! {
     )
     + BinOps
     (
+        self Add self -> Wrapped(DVec3),
         self Add Raw(f64) -> Wrapped(DVec3),
         self Add Wrapped(DVec3) -> Wrapped(DVec3),
-        self Add self -> Wrapped(DVec3),
-        self Sub Wrapped(DVec3) -> Wrapped(DVec3),
         self Sub self -> Wrapped(DVec3),
+        self Sub Wrapped(DVec3) -> Wrapped(DVec3),
         self Sub Raw(f64) -> Wrapped(DVec3),
-        self Div Raw(f64) -> Wrapped(DVec3),
-        self Div Wrapped(DVec3) -> Wrapped(DVec3),
         self Div self -> Wrapped(DVec3),
-        self Mul Raw(f64) -> Wrapped(DVec3),
-        self Mul self -> Wrapped(DVec3),
+        self Div Wrapped(DVec3) -> Wrapped(DVec3),
+        self Div Raw(f64) -> Wrapped(DVec3),
         self Mul Wrapped(DVec3) -> Wrapped(DVec3),
-        self Rem Raw(f64) -> Wrapped(DVec3),
-        self Rem self -> Wrapped(DVec3),
+        self Mul self -> Wrapped(DVec3),
+        self Mul Raw(f64) -> Wrapped(DVec3),
         self Rem Wrapped(DVec3) -> Wrapped(DVec3),
+        self Rem self -> Wrapped(DVec3),
+        self Rem Raw(f64) -> Wrapped(DVec3),
     )
     + UnaryOps
     (
@@ -5840,7 +5888,7 @@ impl_script_newtype! {
         ///uses the element from `if_false`.
         select(Wrapped(BVec4),self,self) -> self,
 
-        ///Creates a 2D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
+        ///Creates a 3D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
         ///
         ///Truncation to [`DVec3`] may also be performed by using [`self.xyz()`][crate::swizzles::Vec4Swizzles::xyz()].
         truncate(self:) -> Wrapped(DVec3),
@@ -5971,6 +6019,14 @@ impl_script_newtype! {
 
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(f64),
+
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///[Euclidean division]: f64::rem_euclid
+        rem_euclid(self:self) -> self,
 
         ///Returns `self` normalized to length 1.0.
         ///
@@ -6129,20 +6185,20 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add Raw(f64) -> Wrapped(DVec4),
         self Add self -> Wrapped(DVec4),
         self Add Wrapped(DVec4) -> Wrapped(DVec4),
+        self Add Raw(f64) -> Wrapped(DVec4),
         self Sub Raw(f64) -> Wrapped(DVec4),
         self Sub Wrapped(DVec4) -> Wrapped(DVec4),
         self Sub self -> Wrapped(DVec4),
         self Div Wrapped(DVec4) -> Wrapped(DVec4),
-        self Div self -> Wrapped(DVec4),
         self Div Raw(f64) -> Wrapped(DVec4),
+        self Div self -> Wrapped(DVec4),
         self Mul Wrapped(DVec4) -> Wrapped(DVec4),
-        self Mul Raw(f64) -> Wrapped(DVec4),
         self Mul self -> Wrapped(DVec4),
-        self Rem Raw(f64) -> Wrapped(DVec4),
+        self Mul Raw(f64) -> Wrapped(DVec4),
         self Rem self -> Wrapped(DVec4),
+        self Rem Raw(f64) -> Wrapped(DVec4),
         self Rem Wrapped(DVec4) -> Wrapped(DVec4),
     )
     + UnaryOps
@@ -6278,6 +6334,20 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(i32),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        ///
+        ///[Euclidean division]: i32::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Returns a vector that is equal to `self` rotated by 90 degrees.
         perp(self:) -> self,
 
@@ -6299,6 +6369,46 @@ impl_script_newtype! {
         ///Casts all elements of `self` to `u32`.
         as_uvec2(&self:) -> Wrapped(UVec2),
 
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
+
     )
     + Fields
     (
@@ -6307,21 +6417,21 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add self -> Wrapped(IVec2),
         self Add Wrapped(IVec2) -> Wrapped(IVec2),
         self Add Raw(i32) -> Wrapped(IVec2),
+        self Add self -> Wrapped(IVec2),
+        self Sub self -> Wrapped(IVec2),
         self Sub Wrapped(IVec2) -> Wrapped(IVec2),
         self Sub Raw(i32) -> Wrapped(IVec2),
-        self Sub self -> Wrapped(IVec2),
         self Div Raw(i32) -> Wrapped(IVec2),
-        self Div Wrapped(IVec2) -> Wrapped(IVec2),
         self Div self -> Wrapped(IVec2),
-        self Mul self -> Wrapped(IVec2),
-        self Mul Wrapped(IVec2) -> Wrapped(IVec2),
+        self Div Wrapped(IVec2) -> Wrapped(IVec2),
         self Mul Raw(i32) -> Wrapped(IVec2),
-        self Rem self -> Wrapped(IVec2),
-        self Rem Raw(i32) -> Wrapped(IVec2),
+        self Mul Wrapped(IVec2) -> Wrapped(IVec2),
+        self Mul self -> Wrapped(IVec2),
         self Rem Wrapped(IVec2) -> Wrapped(IVec2),
+        self Rem Raw(i32) -> Wrapped(IVec2),
+        self Rem self -> Wrapped(IVec2),
     )
     + UnaryOps
     (
@@ -6464,6 +6574,20 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(i32),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        ///
+        ///[Euclidean division]: i32::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Casts all elements of `self` to `f32`.
         as_vec3(&self:) -> Wrapped(Vec3),
 
@@ -6475,6 +6599,46 @@ impl_script_newtype! {
 
         ///Casts all elements of `self` to `u32`.
         as_uvec3(&self:) -> Wrapped(UVec3),
+
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
 
     )
     + Fields
@@ -6488,15 +6652,15 @@ impl_script_newtype! {
         self Add Raw(i32) -> Wrapped(IVec3),
         self Add Wrapped(IVec3) -> Wrapped(IVec3),
         self Add self -> Wrapped(IVec3),
+        self Sub Wrapped(IVec3) -> Wrapped(IVec3),
         self Sub Raw(i32) -> Wrapped(IVec3),
         self Sub self -> Wrapped(IVec3),
-        self Sub Wrapped(IVec3) -> Wrapped(IVec3),
-        self Div Raw(i32) -> Wrapped(IVec3),
         self Div self -> Wrapped(IVec3),
         self Div Wrapped(IVec3) -> Wrapped(IVec3),
+        self Div Raw(i32) -> Wrapped(IVec3),
+        self Mul Raw(i32) -> Wrapped(IVec3),
         self Mul Wrapped(IVec3) -> Wrapped(IVec3),
         self Mul self -> Wrapped(IVec3),
-        self Mul Raw(i32) -> Wrapped(IVec3),
         self Rem Raw(i32) -> Wrapped(IVec3),
         self Rem Wrapped(IVec3) -> Wrapped(IVec3),
         self Rem self -> Wrapped(IVec3),
@@ -6532,7 +6696,7 @@ impl_script_newtype! {
         ///uses the element from `if_false`.
         select(Wrapped(BVec4),self,self) -> self,
 
-        ///Creates a 2D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
+        ///Creates a 3D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
         ///
         ///Truncation to [`IVec3`] may also be performed by using [`self.xyz()`][crate::swizzles::Vec4Swizzles::xyz()].
         truncate(self:) -> Wrapped(IVec3),
@@ -6636,6 +6800,20 @@ impl_script_newtype! {
         ///Compute the squared euclidean distance between two points in space.
         distance_squared(self:self) -> Raw(i32),
 
+        ///Returns the element-wise quotient of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        div_euclid(self:self) -> self,
+
+        ///Returns the element-wise remainder of [Euclidean division] of `self` by `rhs`.
+        ///
+        ///# Panics
+        ///This function will panic if any `rhs` element is 0 or the division results in overflow.
+        ///
+        ///[Euclidean division]: i32::rem_euclid
+        rem_euclid(self:self) -> self,
+
         ///Casts all elements of `self` to `f32`.
         as_vec4(&self:) -> Wrapped(Vec4),
 
@@ -6644,6 +6822,46 @@ impl_script_newtype! {
 
         ///Casts all elements of `self` to `u32`.
         as_uvec4(&self:) -> Wrapped(UVec4),
+
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
 
     )
     + Fields
@@ -6658,17 +6876,17 @@ impl_script_newtype! {
         self Add Wrapped(IVec4) -> Wrapped(IVec4),
         self Add self -> Wrapped(IVec4),
         self Add Raw(i32) -> Wrapped(IVec4),
-        self Sub self -> Wrapped(IVec4),
         self Sub Wrapped(IVec4) -> Wrapped(IVec4),
+        self Sub self -> Wrapped(IVec4),
         self Sub Raw(i32) -> Wrapped(IVec4),
         self Div self -> Wrapped(IVec4),
-        self Div Wrapped(IVec4) -> Wrapped(IVec4),
         self Div Raw(i32) -> Wrapped(IVec4),
-        self Mul self -> Wrapped(IVec4),
-        self Mul Wrapped(IVec4) -> Wrapped(IVec4),
+        self Div Wrapped(IVec4) -> Wrapped(IVec4),
         self Mul Raw(i32) -> Wrapped(IVec4),
-        self Rem Raw(i32) -> Wrapped(IVec4),
+        self Mul Wrapped(IVec4) -> Wrapped(IVec4),
+        self Mul self -> Wrapped(IVec4),
         self Rem Wrapped(IVec4) -> Wrapped(IVec4),
+        self Rem Raw(i32) -> Wrapped(IVec4),
         self Rem self -> Wrapped(IVec4),
     )
     + UnaryOps
@@ -6794,6 +7012,46 @@ impl_script_newtype! {
         ///Casts all elements of `self` to `i32`.
         as_ivec2(&self:) -> Wrapped(IVec2),
 
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
+
     )
     + Fields
     (
@@ -6803,20 +7061,20 @@ impl_script_newtype! {
     + BinOps
     (
         self Add Raw(u32) -> Wrapped(UVec2),
-        self Add Wrapped(UVec2) -> Wrapped(UVec2),
         self Add self -> Wrapped(UVec2),
+        self Add Wrapped(UVec2) -> Wrapped(UVec2),
+        self Sub Raw(u32) -> Wrapped(UVec2),
         self Sub self -> Wrapped(UVec2),
         self Sub Wrapped(UVec2) -> Wrapped(UVec2),
-        self Sub Raw(u32) -> Wrapped(UVec2),
+        self Div Wrapped(UVec2) -> Wrapped(UVec2),
         self Div self -> Wrapped(UVec2),
         self Div Raw(u32) -> Wrapped(UVec2),
-        self Div Wrapped(UVec2) -> Wrapped(UVec2),
+        self Mul self -> Wrapped(UVec2),
         self Mul Wrapped(UVec2) -> Wrapped(UVec2),
         self Mul Raw(u32) -> Wrapped(UVec2),
-        self Mul self -> Wrapped(UVec2),
-        self Rem self -> Wrapped(UVec2),
         self Rem Raw(u32) -> Wrapped(UVec2),
         self Rem Wrapped(UVec2) -> Wrapped(UVec2),
+        self Rem self -> Wrapped(UVec2),
     )
     + UnaryOps
     (
@@ -6951,6 +7209,46 @@ impl_script_newtype! {
         ///Casts all elements of `self` to `i32`.
         as_ivec3(&self:) -> Wrapped(IVec3),
 
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
+
     )
     + Fields
     (
@@ -6960,12 +7258,12 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Add Wrapped(UVec3) -> Wrapped(UVec3),
-        self Add Raw(u32) -> Wrapped(UVec3),
         self Add self -> Wrapped(UVec3),
+        self Add Raw(u32) -> Wrapped(UVec3),
+        self Add Wrapped(UVec3) -> Wrapped(UVec3),
         self Sub Wrapped(UVec3) -> Wrapped(UVec3),
-        self Sub Raw(u32) -> Wrapped(UVec3),
         self Sub self -> Wrapped(UVec3),
+        self Sub Raw(u32) -> Wrapped(UVec3),
         self Div self -> Wrapped(UVec3),
         self Div Raw(u32) -> Wrapped(UVec3),
         self Div Wrapped(UVec3) -> Wrapped(UVec3),
@@ -7006,7 +7304,7 @@ impl_script_newtype! {
         ///uses the element from `if_false`.
         select(Wrapped(BVec4),self,self) -> self,
 
-        ///Creates a 2D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
+        ///Creates a 3D vector from the `x`, `y` and `z` elements of `self`, discarding `w`.
         ///
         ///Truncation to [`UVec3`] may also be performed by using [`self.xyz()`][crate::swizzles::Vec4Swizzles::xyz()].
         truncate(self:) -> Wrapped(UVec3),
@@ -7100,6 +7398,46 @@ impl_script_newtype! {
         ///Casts all elements of `self` to `i32`.
         as_ivec4(&self:) -> Wrapped(IVec4),
 
+        ///Returns a vector containing the wrapping addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_add(rhs.x), self.y.wrapping_add(rhs.y), ..]`.
+        wrapping_add(self:self) -> self,
+
+        ///Returns a vector containing the wrapping subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_sub(rhs.x), self.y.wrapping_sub(rhs.y), ..]`.
+        wrapping_sub(self:self) -> self,
+
+        ///Returns a vector containing the wrapping multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_mul(rhs.x), self.y.wrapping_mul(rhs.y), ..]`.
+        wrapping_mul(self:self) -> self,
+
+        ///Returns a vector containing the wrapping division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.wrapping_div(rhs.x), self.y.wrapping_div(rhs.y), ..]`.
+        wrapping_div(self:self) -> self,
+
+        ///Returns a vector containing the saturating addition of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_add(rhs.x), self.y.saturating_add(rhs.y), ..]`.
+        saturating_add(self:self) -> self,
+
+        ///Returns a vector containing the saturating subtraction of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_sub(rhs.x), self.y.saturating_sub(rhs.y), ..]`.
+        saturating_sub(self:self) -> self,
+
+        ///Returns a vector containing the saturating multiplication of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_mul(rhs.x), self.y.saturating_mul(rhs.y), ..]`.
+        saturating_mul(self:self) -> self,
+
+        ///Returns a vector containing the saturating division of `self` and `rhs`.
+        ///
+        ///In other words this computes `[self.x.saturating_div(rhs.x), self.y.saturating_div(rhs.y), ..]`.
+        saturating_div(self:self) -> self,
+
     )
     + Fields
     (
@@ -7110,20 +7448,20 @@ impl_script_newtype! {
     )
     + BinOps
     (
+        self Add Raw(u32) -> Wrapped(UVec4),
         self Add self -> Wrapped(UVec4),
         self Add Wrapped(UVec4) -> Wrapped(UVec4),
-        self Add Raw(u32) -> Wrapped(UVec4),
+        self Sub Raw(u32) -> Wrapped(UVec4),
         self Sub self -> Wrapped(UVec4),
         self Sub Wrapped(UVec4) -> Wrapped(UVec4),
-        self Sub Raw(u32) -> Wrapped(UVec4),
+        self Div Wrapped(UVec4) -> Wrapped(UVec4),
         self Div self -> Wrapped(UVec4),
         self Div Raw(u32) -> Wrapped(UVec4),
-        self Div Wrapped(UVec4) -> Wrapped(UVec4),
         self Mul Wrapped(UVec4) -> Wrapped(UVec4),
         self Mul self -> Wrapped(UVec4),
         self Mul Raw(u32) -> Wrapped(UVec4),
-        self Rem self -> Wrapped(UVec4),
         self Rem Raw(u32) -> Wrapped(UVec4),
+        self Rem self -> Wrapped(UVec4),
         self Rem Wrapped(UVec4) -> Wrapped(UVec4),
     )
     + UnaryOps
@@ -7340,11 +7678,11 @@ impl_script_newtype! {
         self Add self -> Wrapped(Mat3),
         self Sub self -> Wrapped(Mat3),
         self Mul Wrapped(Mat3) -> Wrapped(Mat3),
+        self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
         self Mul Wrapped(Affine2) -> Wrapped(Mat3),
         self Mul Raw(f32) -> Wrapped(Mat3),
         self Mul self -> Wrapped(Mat3),
         self Mul Wrapped(Vec3) -> Wrapped(Vec3),
-        self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
     )
     + UnaryOps
     (
@@ -7483,8 +7821,8 @@ impl_script_newtype! {
         self Sub self -> Wrapped(Mat2),
         self Mul Wrapped(Vec2) -> Wrapped(Vec2),
         self Mul Wrapped(Mat2) -> Wrapped(Mat2),
-        self Mul Raw(f32) -> Wrapped(Mat2),
         self Mul self -> Wrapped(Mat2),
+        self Mul Raw(f32) -> Wrapped(Mat2),
     )
     + UnaryOps
     (
@@ -7722,12 +8060,12 @@ impl_script_newtype! {
     (
         self Add self -> Wrapped(Mat3A),
         self Sub self -> Wrapped(Mat3A),
-        self Mul Wrapped(Mat3A) -> Wrapped(Mat3A),
-        self Mul Wrapped(Affine2) -> Wrapped(Mat3A),
-        self Mul Wrapped(Vec3) -> Wrapped(Vec3),
-        self Mul Raw(f32) -> Wrapped(Mat3A),
         self Mul self -> Wrapped(Mat3A),
         self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
+        self Mul Wrapped(Vec3) -> Wrapped(Vec3),
+        self Mul Wrapped(Mat3A) -> Wrapped(Mat3A),
+        self Mul Wrapped(Affine2) -> Wrapped(Mat3A),
+        self Mul Raw(f32) -> Wrapped(Mat3A),
     )
     + UnaryOps
     (
@@ -8108,11 +8446,11 @@ impl_script_newtype! {
     (
         self Add self -> Wrapped(Mat4),
         self Sub self -> Wrapped(Mat4),
-        self Mul self -> Wrapped(Mat4),
-        self Mul Raw(f32) -> Wrapped(Mat4),
-        self Mul Wrapped(Mat4) -> Wrapped(Mat4),
-        self Mul Wrapped(Affine3A) -> Wrapped(Mat4),
         self Mul Wrapped(Vec4) -> Wrapped(Vec4),
+        self Mul Wrapped(Mat4) -> Wrapped(Mat4),
+        self Mul Raw(f32) -> Wrapped(Mat4),
+        self Mul Wrapped(Affine3A) -> Wrapped(Mat4),
+        self Mul self -> Wrapped(Mat4),
     )
     + UnaryOps
     (
@@ -8244,10 +8582,10 @@ impl_script_newtype! {
     (
         self Add self -> Wrapped(DMat2),
         self Sub self -> Wrapped(DMat2),
-        self Mul Raw(f64) -> Wrapped(DMat2),
         self Mul Wrapped(DVec2) -> Wrapped(DVec2),
-        self Mul self -> Wrapped(DMat2),
         self Mul Wrapped(DMat2) -> Wrapped(DMat2),
+        self Mul self -> Wrapped(DMat2),
+        self Mul Raw(f64) -> Wrapped(DMat2),
     )
     + UnaryOps
     (
@@ -8482,11 +8820,11 @@ impl_script_newtype! {
     (
         self Add self -> Wrapped(DMat3),
         self Sub self -> Wrapped(DMat3),
-        self Mul self -> Wrapped(DMat3),
-        self Mul Wrapped(DVec3) -> Wrapped(DVec3),
         self Mul Wrapped(DMat3) -> Wrapped(DMat3),
-        self Mul Raw(f64) -> Wrapped(DMat3),
+        self Mul Wrapped(DVec3) -> Wrapped(DVec3),
+        self Mul self -> Wrapped(DMat3),
         self Mul Wrapped(DAffine2) -> Wrapped(DMat3),
+        self Mul Raw(f64) -> Wrapped(DMat3),
     )
     + UnaryOps
     (
@@ -8850,11 +9188,11 @@ impl_script_newtype! {
     (
         self Add self -> Wrapped(DMat4),
         self Sub self -> Wrapped(DMat4),
-        self Mul Wrapped(DAffine3) -> Wrapped(DMat4),
         self Mul Raw(f64) -> Wrapped(DMat4),
-        self Mul self -> Wrapped(DMat4),
         self Mul Wrapped(DMat4) -> Wrapped(DMat4),
         self Mul Wrapped(DVec4) -> Wrapped(DVec4),
+        self Mul Wrapped(DAffine3) -> Wrapped(DMat4),
+        self Mul self -> Wrapped(DMat4),
     )
     + UnaryOps
     (
@@ -8981,8 +9319,8 @@ impl_script_newtype! {
     + BinOps
     (
         self Mul Wrapped(Mat3A) -> Wrapped(Mat3A),
-        self Mul Wrapped(Mat3) -> Wrapped(Mat3),
         self Mul Wrapped(Affine2) -> Wrapped(Affine2),
+        self Mul Wrapped(Mat3) -> Wrapped(Mat3),
     )
     + UnaryOps
     (
@@ -9236,8 +9574,8 @@ impl_script_newtype! {
     )
     + BinOps
     (
-        self Mul Wrapped(DMat3) -> Wrapped(DMat3),
         self Mul Wrapped(DAffine2) -> Wrapped(DAffine2),
+        self Mul Wrapped(DMat3) -> Wrapped(DMat3),
     )
     + UnaryOps
     (
@@ -9646,9 +9984,9 @@ impl_script_newtype! {
         self Add self -> Wrapped(Quat),
         self Sub self -> Wrapped(Quat),
         self Div Raw(f32) -> Wrapped(Quat),
+        self Mul Raw(f32) -> Wrapped(Quat),
         self Mul Wrapped(Vec3) -> Wrapped(Vec3),
         self Mul self -> Wrapped(Quat),
-        self Mul Raw(f32) -> Wrapped(Quat),
         self Mul Wrapped(Vec3A) -> Wrapped(Vec3A),
     )
     + UnaryOps
@@ -9908,9 +10246,9 @@ impl_script_newtype! {
         self Add self -> Wrapped(DQuat),
         self Sub self -> Wrapped(DQuat),
         self Div Raw(f64) -> Wrapped(DQuat),
+        self Mul Wrapped(DVec3) -> Wrapped(DVec3),
         self Mul Raw(f64) -> Wrapped(DQuat),
         self Mul self -> Wrapped(DQuat),
-        self Mul Wrapped(DVec3) -> Wrapped(DVec3),
     )
     + UnaryOps
     (
