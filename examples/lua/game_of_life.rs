@@ -1,11 +1,12 @@
-use std::{borrow::Cow, sync::Mutex, time::Duration};
+#![allow(deprecated)]
+use std::sync::Mutex;
 
 use bevy::{
-    asset::ChangeWatcher,
     diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
     prelude::*,
     reflect::Reflect,
     render::{
+        render_asset::RenderAssetUsages,
         render_resource::{Extent3d, TextureDimension, TextureFormat},
         texture::ImageSampler,
     },
@@ -14,24 +15,11 @@ use bevy::{
 
 use bevy_mod_scripting::prelude::*;
 
-#[derive(Debug, Default, Reflect, Component)]
+#[derive(Debug, Default, Clone, Reflect, Component, LuaProxy)]
 #[reflect(Component, LuaProxyable)]
 pub struct LifeState {
     pub cells: Vec<u8>,
 }
-
-impl_script_newtype!(
-    #[languages(lua)]
-    LifeState : Debug
-    lua impl {
-        get "cells" => |lua,s: &LuaLifeState| {
-            Ok(LuaVec::<u8>::new_ref(s.script_ref(lua.get_world()?).index(Cow::Borrowed("cells"))))
-        };
-        set "cells" => |lua,s,o| {
-            Vec::<u8>::apply_lua(&mut s.script_ref(lua.get_world()?).index(Cow::Borrowed("cells")),lua,o)
-        };
-    }
-);
 
 #[derive(Default)]
 pub struct LifeAPI;
@@ -44,13 +32,6 @@ impl APIProvider for LifeAPI {
     fn attach_api(&mut self, _: &mut Self::APITarget) -> Result<(), ScriptError> {
         // we don't actually provide anything global
         Ok(())
-    }
-
-    fn get_doc_fragment(&self) -> Option<Self::DocTarget> {
-        // this will enable us type casting in teal
-        Some(LuaDocFragment::new("MyAPI", |tw| {
-            tw.process_type::<LuaLifeState>()
-        }))
     }
 
     fn register_with_app(&self, app: &mut App) {
@@ -98,11 +79,11 @@ pub fn setup(
         TextureDimension::D2,
         &[0u8],
         TextureFormat::R8Unorm,
+        RenderAssetUsages::RENDER_WORLD | RenderAssetUsages::MAIN_WORLD,
     );
 
-    image.sampler_descriptor = ImageSampler::nearest();
+    image.sampler = ImageSampler::nearest();
 
-    // in release builds we want to fetch ".lua" files over ".tl" files
     let script_path = bevy_mod_scripting_lua::lua_path!("game_of_life");
 
     commands.spawn(Camera2dBundle::default());
@@ -138,14 +119,14 @@ pub fn sync_window_size(
     mut resize_event: EventReader<WindowResized>,
     mut settings: ResMut<Settings>,
     mut query: Query<&mut Sprite, With<LifeState>>,
-    primary_windows: Query<(&Window, With<PrimaryWindow>)>,
+    primary_windows: Query<&Window, With<PrimaryWindow>>,
 ) {
     if let Some(e) = resize_event
-        .iter()
+        .read()
         .filter(|e| primary_windows.get(e.window).is_ok())
         .last()
     {
-        let (primary_window, _) = primary_windows.get(e.window).unwrap();
+        let primary_window = primary_windows.get(e.window).unwrap();
         settings.display_grid_dimensions = (
             primary_window.physical_width(),
             primary_window.physical_height(),
@@ -210,31 +191,26 @@ pub fn send_init(mut events: PriorityEventWriter<LuaEvent<()>>) {
     )
 }
 
-/// how often to step the simulation
-const UPDATE_FREQUENCY: f32 = 1.0 / 20.0;
+const UPDATE_FREQUENCY: f32 = 1.0 / 60.0;
 
 fn main() -> std::io::Result<()> {
     let mut app = App::new();
 
-    app.add_plugins(DefaultPlugins.set(AssetPlugin {
-        watch_for_changes: ChangeWatcher::with_delay(Duration::from_secs(0)),
-        ..Default::default()
-    }))
-    .insert_resource(FixedTime::new_from_secs(UPDATE_FREQUENCY))
-    .add_plugins(LogDiagnosticsPlugin::default())
-    .add_plugins(FrameTimeDiagnosticsPlugin)
-    .add_plugins(ScriptingPlugin)
-    .init_resource::<Settings>()
-    .add_systems(Startup, setup)
-    .add_systems(Startup, send_init)
-    .add_systems(Update, sync_window_size)
-    .add_systems(FixedUpdate, update_rendered_state.after(sync_window_size))
-    .add_systems(FixedUpdate, send_on_update.after(update_rendered_state))
-    .add_systems(FixedUpdate, script_event_handler::<LuaScriptHost<()>, 0, 1>)
-    .add_script_host::<LuaScriptHost<()>>(PostUpdate)
-    .add_api_provider::<LuaScriptHost<()>>(Box::new(LuaBevyAPIProvider))
-    .add_api_provider::<LuaScriptHost<()>>(Box::new(LifeAPI))
-    .update_documentation::<LuaScriptHost<()>>();
+    app.add_plugins(DefaultPlugins)
+        .insert_resource(Time::<Fixed>::from_seconds(UPDATE_FREQUENCY.into()))
+        .add_plugins(LogDiagnosticsPlugin::default())
+        .add_plugins(FrameTimeDiagnosticsPlugin)
+        .add_plugins(ScriptingPlugin)
+        .init_resource::<Settings>()
+        .add_systems(Startup, setup)
+        .add_systems(Startup, send_init)
+        .add_systems(Update, sync_window_size)
+        .add_systems(FixedUpdate, update_rendered_state.after(sync_window_size))
+        .add_systems(FixedUpdate, send_on_update.after(update_rendered_state))
+        .add_systems(FixedUpdate, script_event_handler::<LuaScriptHost<()>, 0, 1>)
+        .add_script_host::<LuaScriptHost<()>>(PostUpdate)
+        .add_api_provider::<LuaScriptHost<()>>(Box::new(LuaCoreBevyAPIProvider))
+        .add_api_provider::<LuaScriptHost<()>>(Box::new(LifeAPI));
 
     app.run();
 
